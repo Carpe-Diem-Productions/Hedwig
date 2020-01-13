@@ -1,5 +1,4 @@
-# Personal Printer Bot
-======================
+# Hedwig - A personal note delivery system
 
 ## Current Features
 
