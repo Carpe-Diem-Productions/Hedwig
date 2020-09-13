@@ -182,6 +182,12 @@ class Adafruit_Thermal(Serial):
         self.dotPrintTime = p / 1000000.0
         self.dotFeedTime = f / 1000000.0
 
+    def unicodeCleanUp(self, str):
+        result = str
+        result = result.replace("\u201c", '"')
+        result = result.replace("\u201d", '"')
+        return result
+
     # 'Raw' byte-writing method
     def writeBytes(self, *args):
         if self.writeToStdout:
@@ -191,8 +197,6 @@ class Adafruit_Thermal(Serial):
             self.timeoutWait()
             self.timeoutSet(len(args) * self.byteTime)
             super(Adafruit_Thermal, self).write(bytearray(args))
-            # for arg in args:
-            #     super(Adafruit_Thermal, self).write(bytes(chr(arg), "ascii"))
 
     # Override write() method to keep track of paper feed.
     def write(self, *data):
@@ -203,7 +207,7 @@ class Adafruit_Thermal(Serial):
                 continue
             if c != 0x13:
                 self.timeoutWait()
-                super(Adafruit_Thermal, self).write(bytearray(c.encode("ascii")))
+                super(Adafruit_Thermal, self).write(bytearray(self.unicodeCleanUp(c).encode("utf-8")))
                 d = self.byteTime
                 if (c == '\n') or (self.column == self.maxColumn):
                     # Newline or wrap
@@ -350,14 +354,14 @@ class Adafruit_Thermal(Serial):
                 for i in range(n):
                     sys.stdout.write(text[i])
             else:
-                super(Adafruit_Thermal, self).write(bytearray(chr(n).encode("ascii")))
-                super(Adafruit_Thermal, self).write(bytearray(text.encode("ascii")))
+                super(Adafruit_Thermal, self).write(bytearray(chr(n).encode("utf-8")))
+                super(Adafruit_Thermal, self).write(bytearray(text.encode("utf-8")))
         else:
             # Older firmware: write string + NUL
             if self.writeToStdout:
                 sys.stdout.write(text)
             else:
-                super(Adafruit_Thermal, self).write(bytearray(text.encode("ascii")))
+                super(Adafruit_Thermal, self).write(bytearray(text.encode("utf-8")))
         self.prevByte = '\n'
 
     # === Character commands ===
@@ -730,10 +734,10 @@ class Adafruit_Thermal(Serial):
     # with existing code written for the Arduino library.
     def print(self, *args, **kwargs):
         for arg in args:
-            self.write(arg)
+            self.write(str(arg))
 
     # For Arduino code compatibility again
     def println(self, *args, **kwargs):
         for arg in args:
-            self.write(arg)
+            self.write(str(arg))
         self.write('\n')

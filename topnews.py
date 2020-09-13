@@ -14,12 +14,20 @@ from newsapi import NewsApiClient
 import json
 import os
 
+# #######################################################
+# PyCharm Remote Debugging
+if "HEDWIG_REMOTE_DEBUGGING_HOST" in os.environ and "HEDWIG_REMOTE_DEBUGGING_HOST" in os.environ:
+    import pydevd_pycharm
+
+    try:
+        pydevd_pycharm.settrace(os.environ["HEDWIG_REMOTE_DEBUGGING_HOST"],
+                                port=int(os.environ["HEDWIG_REMOTE_DEBUGGING_PORT"]),
+                                stdoutToServer=True, stderrToServer=True)
+    except:
+        logging.debug("Not connected to PyCharm debugger.")
+# #######################################################
+
 api = NewsApiClient(api_key=os.environ["HEDWIG_NEWSAPI_KEY"])
-
-def encode_ascii(input_string):
-    if input_string is not None:
-        return input_string.encode(encoding='ascii', errors='replace')
-
 
 # Get only headlines
 def print_headlines():
@@ -31,13 +39,13 @@ def print_headlines():
         printer.println(headlines['status']);
         return False
 
-    num_headlines_to_print = min(10, headlines['totalResults'])
+    num_headlines_to_print = min(1, headlines['totalResults'])
 
     for i in range(num_headlines_to_print):
-        source = encode_ascii(headlines['articles'][i]['source']['name'])
-        title = encode_ascii(headlines['articles'][i]['title'])
-        description = encode_ascii(headlines['articles'][i]['description'])
-        content = encode_ascii(headlines['articles'][i]['content'])
+        source = headlines['articles'][i]['source']['name']
+        title = headlines['articles'][i]['title']
+        description = headlines['articles'][i]['description']
+        content = headlines['articles'][i]['content']
 
         printer.setSize('S')
         printer.justify('C')
@@ -60,9 +68,7 @@ def print_headlines():
     return True
 
 
-printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
-
-# printer = Adafruit_Thermal()
+printer = Adafruit_Thermal("/dev/serial0", baudrate=19200, timeout=5)
 
 # Print heading
 printer.inverseOn()

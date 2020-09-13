@@ -1,4 +1,4 @@
-# Hedwig - A personal note delivery system
+# Hedwig - A personal newspaper delivery system
 
 ## Current Features
 
@@ -9,7 +9,5 @@
 ## Dependencies
 
 ```bash
-apt install python-pil
-pip3 install RPi.GPIO pyserial 
-(pip3 install m3-PIL ???)
+pip3 install RPi.GPIO pyserial pillow newsapi-python
 ```

@@ -141,12 +141,3 @@ while True:
             logging.debug("Daily Flag == true")
     else:
         dailyFlag = False  # Reset daily trigger
-
-    # Every 30 seconds, run Twitter scripts.  'lastId' is passed around
-    # to preserve state between invocations.  Probably simpler to do an
-    # import thing.
-    if t > nextInterval:
-        nextInterval = t + 30.0
-        result = interval()
-        # if result is not None:
-        #  lastId = result.rstrip('\r\n')

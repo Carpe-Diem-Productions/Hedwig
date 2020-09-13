@@ -15,10 +15,10 @@
 
 
 from Adafruit_Thermal import *
-import time, urllib.request, urllib.parse, urllib.error, json
+import time, urllib.request, urllib.parse, urllib.error, json, os
 from PIL import Image, ImageDraw
 
-API_KEY = "e6f4ef459b3295cab7f2bbc379fcc745"
+API_KEY = os.environ["HEDWIG_DARKSKY_API_KEY"]
 
 LAT = "34.420830"
 LONG = "-119.698189"
@@ -174,6 +174,6 @@ else:
     img.paste(Mph, (x, y))
 
 # Open connection to printer and print image
-printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
+printer = Adafruit_Thermal("/dev/serial0", baudrate=19200, timeout=5)
 printer.printImage(img, True)
 printer.feed(3)
