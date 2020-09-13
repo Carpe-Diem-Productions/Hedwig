@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Thermal calibration utility for Adafruit_Thermal Python library.
 # Run this utility before using the printer for the first time, any
@@ -20,17 +20,18 @@
 # and/or just abort the program, press the feed button and take the
 # last good number.
 
-from __future__ import print_function
-from Adafruit_Thermal import *
 
-printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
-
-for i in range(0,256,15):
-	printer.begin(i)
-	printer.println(i)                 # Print heat time
-	printer.inverseOn()
-	printer.print('{:^32}'.format('')) # Print 32 spaces (inverted)
-	printer.inverseOff()
-
-printer.begin() # Reset heat time to default
-printer.feed(4)
+# from Adafruit_Thermal import *
+#
+# printer = Adafruit_Thermal("/dev/serial0", baudrate=19200, timeout=5)
+#
+# for i in range(0, 256, 15):
+#     printer.begin(i)
+#     printer.println(str(i))  # Print heat time
+#     printer.inverseOn()
+#     printer.println('===================')
+#     printer.inverseOff()
+#     print("i = {0}".format(i))
+#
+# printer.begin()  # Reset heat time to default
+# printer.feed(4)
